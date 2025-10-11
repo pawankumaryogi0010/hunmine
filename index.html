@@ -472,6 +472,93 @@
             text-decoration: underline;
         }
 
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            overflow: auto;
+        }
+
+        .modal-content {
+            position: relative;
+            margin: 2% auto;
+            width: 90%;
+            max-width: 900px;
+            animation: modalFadeIn 0.3s ease;
+        }
+
+        .modal-content img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.3);
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 25px;
+            color: #fff;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 1001;
+            background: rgba(0, 0, 0, 0.7);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .close-btn:hover {
+            background: rgba(255, 0, 0, 0.7);
+            transform: scale(1.1);
+        }
+
+        /* Document Buttons Container */
+        .document-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+
+        .doc-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 15px 30px;
+            background: linear-gradient(135deg, #00ffff, #0080ff);
+            color: #000;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .doc-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 255, 255, 0.3);
+        }
+
+        .doc-btn.roadmap {
+            background: linear-gradient(135deg, #ff00ff, #ff0080);
+        }
+
         /* Animations */
         @keyframes slideInLeft {
             to {
@@ -497,6 +584,17 @@
             to {
                 opacity: 1;
                 transform: translateY(0);
+            }
+        }
+
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
             }
         }
 
@@ -550,6 +648,16 @@
             .hero-text p {
                 max-width: 100%;
             }
+
+            .document-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .doc-btn {
+                width: 80%;
+                justify-content: center;
+            }
         }
 
         @media (max-width: 768px) {
@@ -579,6 +687,19 @@
                 width: 100px;
                 height: 100px;
                 left: -30px;
+            }
+
+            .modal-content {
+                margin: 5% auto;
+                width: 95%;
+            }
+
+            .close-btn {
+                top: 10px;
+                right: 15px;
+                font-size: 30px;
+                width: 40px;
+                height: 40px;
             }
         }
 
@@ -612,6 +733,12 @@
             
             .download-buttons {
                 max-width: 100%;
+            }
+
+            .doc-btn {
+                width: 100%;
+                padding: 12px 25px;
+                font-size: 1rem;
             }
         }
     </style>
@@ -740,7 +867,17 @@
                     <p>With a limited supply and deflationary mechanics, HUN Token offers a sustainable investment opportunity while powering the next generation of mining technology. The HUNMINE application makes acquiring HUN tokens simple and efficient for everyone.</p>
                     <p>Our tokenomics ensure fair distribution and long-term value appreciation, making HUN an essential component of the Web3 financial landscape. Download HUNMINE today to start your mining journey.</p>
                     
-                    <div class="powered-by text-sm text-gray-600">
+                    <!-- Document Buttons -->
+                    <div class="document-buttons">
+                        <button class="doc-btn" onclick="openModal('whitepaperModal')">
+                            <i class="fas fa-file-alt"></i> WHITEPAPER
+                        </button>
+                        <button class="doc-btn roadmap" onclick="openModal('roadmapModal')">
+                            <i class="fas fa-map-marked-alt"></i> ROADMAP
+                        </button>
+                    </div>
+
+                    <div class="about-powered-by text-sm text-gray-600">
                        ⚡ Powered by 
                          <span class="font-semibold">TON Protocol</span> · 
                          <span class="font-semibold">Bitget</span> · 
@@ -799,6 +936,23 @@
         </div>
     </footer>
 
+    <!-- Modals -->
+    <!-- Whitepaper Modal -->
+    <div id="whitepaperModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('whitepaperModal')">&times;</span>
+            <img src="WHITEPAPER.jpg" alt="HUNMINE Whitepaper">
+        </div>
+    </div>
+
+    <!-- Roadmap Modal -->
+    <div id="roadmapModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('roadmapModal')">&times;</span>
+            <img src="ROADMAP.jpg" alt="HUNMINE Roadmap">
+        </div>
+    </div>
+
     <script>
         // Simple animation on scroll
         document.addEventListener('DOMContentLoaded', function() {
@@ -854,9 +1008,41 @@
                 sectionObserver.observe(section);
             });
         });
+
+        // Modal Functions
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = 'block';
+            document.body.style.overflow = 'hidden'; // Prevent background scrolling
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+            document.body.style.overflow = 'auto'; // Restore scrolling
+        }
+
+        // Close modal when clicking outside the image
+        window.onclick = function(event) {
+            const modals = document.querySelectorAll('.modal');
+            modals.forEach(modal => {
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                    document.body.style.overflow = 'auto';
+                }
+            });
+        }
+
+        // Close modal with Escape key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                const modals = document.querySelectorAll('.modal');
+                modals.forEach(modal => {
+                    if (modal.style.display === 'block') {
+                        modal.style.display = 'none';
+                        document.body.style.overflow = 'auto';
+                    }
+                });
+            }
+        });
     </script>
 </body>
-
 </html>
-
-
